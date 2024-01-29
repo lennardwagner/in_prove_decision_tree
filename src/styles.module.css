@@ -1,0 +1,161 @@
+
+.container {
+  display: flex;
+  overflow: scroll;
+  flex-direction: column;
+  height: 100%;
+}
+
+.reactFlow {
+  background-color: #5f5d72;
+
+}
+
+.node {
+  background-color: #222138;
+  color: #fff;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 9px 0px;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.nodeDropzone {
+  background-color: #ff0072;
+  box-shadow: 0 0 9px 0 #ff0072;
+}
+
+.handle {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.sidebar {
+    overflow: scroll;
+  color: white;
+  top: 5px;
+  left: 5px;
+  z-index: 1000;
+  padding: 10px;
+  border-right: 1px solid #222138;
+  width: 150px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  background-color: #5f5d72;
+}
+
+.suggestionbar {
+    /*overflow: scroll;*/
+    color: white;
+    top: 5px;
+    left: 5px;
+    z-index: 1000;
+    padding: 10px;
+    border-left: 1px solid #222138;
+    width: 120px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: #5f5d72;
+}
+
+.sidebarLabel {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: white;
+  background-color: #5f5d72;
+  /*border-color:white;
+  border-style:solid;
+  border-radius: 5px;*/
+}
+
+.sidebarLabel::after {
+  color: white;
+  content: ' ▾';
+}
+
+.sidebarNode {
+  background: #222138;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.sidebarNode:hover {
+  box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 9px 0px;
+}
+
+.topSection {
+  display: flex;
+  overflow: scroll;
+  height: 70%;
+  flex: none;
+}
+
+.flexBreak {
+  display: flex;
+  height: 100px;
+  flex: none;
+}
+
+.button {
+  margin: 20px 100px 200px;
+  top: 10px;
+  left: 10px;
+  color: white;
+  
+  display: inline-block;
+  outline: 0;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px 0 rgb(213 217 217 / 50%);
+  background: #222138;
+  border: 1px solid #222138;
+  font-size: 13px;
+  height: 60px;
+  padding: 50 11px ;
+  text-align: center;
+  width: 10%;
+  min-width: 200px;
+  font-weight: 500;
+  :hover{
+      background: #222138;
+      border-color: #222138;
+      box-shadow: 0 2px 5px 0 rgb(213 217 217 / 50%);
+  }
+  
+}
+
+.stripedTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.stripedTable th, .stripedTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+
+
+/* Customize border color and background color as needed */
+.stripedTable th, .stripedTable td {
+  border-color: #050505; /* Change to the desired border color */
+}
+
+.stripedTable th {
+  background-color: #222138; /* Change to the desired header background color */
+  color: #fff;
+}
+
+.stripedTable tr:nth-child(even) {
+  background-color: #5f5d72; /* Change to the desired even row background color */
+}
+
+.QueryResultsTable {
+  margin-top: 10px;
+  overflow: scroll;
+}
