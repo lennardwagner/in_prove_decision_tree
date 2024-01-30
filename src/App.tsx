@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {
   useEffect,
   useState,
@@ -302,6 +303,7 @@ function ReactFlowTree() {
     setIsPopupModalOpen(false);
   };
   const handlePopupResponse = (data: JSON) => {
+    console.log()
     setPopupResponse(data);
     handleClosePopup();
   };

@@ -1,4 +1,3 @@
-//Suggestionbar.tsx
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import {DragEvent, useEffect, useState} from "react";

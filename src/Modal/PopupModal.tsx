@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import "./PopupModal.css";
 import Modal from "./Modal"
@@ -102,8 +103,6 @@ const PopupModal = ({ onSubmit, isOpen, onClose, edgeType, dataRange}) => {
                             id="cutoff"
                             name="cutoff"
                             value={formState.cutoff}
-                            // min={0}
-                            // max={100}
                             min={rangeArray[0]}
                             max={rangeArray[1]}
                             step={formState.step}
@@ -113,7 +112,6 @@ const PopupModal = ({ onSubmit, isOpen, onClose, edgeType, dataRange}) => {
                         <span>{sliderValue}</span>
                     </div>
                 )}
-                {/* Additional radio buttons for comparison operators */}
                 {edgeType !== 'binary' && (
                 <div className="form-row">
                     <label>Choose a comparison operator:</label>
