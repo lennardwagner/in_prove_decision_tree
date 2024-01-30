@@ -65,9 +65,7 @@ function ReactFlowTree() {
   const [selectedEdge, setSelectedEdge] = useState<Edge | null>();
   const [selectedEdgeType, setSelectedEdgeType] = useState<string>();
   const [selectedDataRange, setSelectedDataRange] = useState(null);
-  const [selectedEdgeBrother, setSelectedEdgeBrother] = useState<Edge | null>(
-    null
-  );
+  const [selectedEdgeBrother, setSelectedEdgeBrother] = useState<Edge | null>(null);
   const [isPopupModalOpen, setIsPopupModalOpen] = useState<Boolean>(false);
   const [popupResponse, setPopupResponse] = useState<JSON | null>();
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -80,8 +78,9 @@ function ReactFlowTree() {
         //console.log('suggestionbarData changed:', suggestionbarData);
     }, [suggestionbarData]); */
 
-  //Only called for very first node
-  //to do: error when nodes.length != 1
+  /**
+   * Function to handle the first node drop, as in that case the node should not be duplicated.
+   **/
   const createFirstNode = (dataString: string) => {
     const dataParsed = JSON.parse(dataString);
     const firstNode: Node<NodeData> = {
@@ -95,8 +94,12 @@ function ReactFlowTree() {
     setInit(true);
     setNextId(nextId + 1);
   };
-  // this function adds a new node and connects it to the source node
-  // todo: add the custom api data to the nodes, to have access to them later.
+
+  /**
+   * After a new node is dropped onto an existing one, two new nodes need to be created.
+   * This function handles the creation of the two new nodes as well as the two new edges.
+   * If a result node is passed, no 'companion' node is created.
+   **/
   const createConnection = (sourceId: string, dataString: string) => {
     // create an incremental ID based on the number of elements already in the graph
     const sourceNodeName = nodes.find((node) => node.id === sourceId)?.data
@@ -161,6 +164,11 @@ function ReactFlowTree() {
   };
 
   // this function is called once the node from the sidebar is dropped onto a node in the current graph
+    /**
+     * onDrop handles the dropping of a node on an existing node.
+     * A node can only be dropped onto another node.
+     * Sends the dropped node to the backend and waits for an updated suggestion from the backend.
+     * */
   const onDrop: DragEventHandler = async (evt: DragEvent<HTMLDivElement>) => {
     // make sure that the event target is a DOM element
     if (evt.target instanceof Element) {
@@ -169,11 +177,11 @@ function ReactFlowTree() {
       const targetId = evt.target
         .closest(".react-flow__node")
         ?.getAttribute("data-id");
-      //only allows drop on node with no children
+      // only allows drop on node with no children
       if (targetId && !edges.map((edge) => edge.source).includes(targetId)) {
         // now we can create a connection to the drop target node
         const data: string = evt.dataTransfer.getData("application/reactflow");
-        //check for initialisation state
+        // check for initialisation state
         if (init) {
           createConnection(targetId, data);
         } else {
@@ -181,6 +189,7 @@ function ReactFlowTree() {
         }
         const dataJSON = JSON.parse(data);
         setNodesWithData((prev) => [...prev, dataJSON]);
+        // send the latest node to the backend.
         await fetch("http://localhost:3001/sendlastnode", {
           method: "POST",
           mode: "cors",
@@ -189,6 +198,7 @@ function ReactFlowTree() {
           },
           body: JSON.stringify(dataJSON),
         });
+        // Wait for the backend to return an updated suggestion.
         await fetchSuggestionbarData()
           .then((data) => setSuggestionbarData([data]))
           .catch((error) =>
@@ -198,9 +208,11 @@ function ReactFlowTree() {
     }
     handleButtonClickLog();
   };
-  useEffect(() => {
+
+  /** helper function for debugging, commented out */
+  /* useEffect(() => {
     //console.log("nodesWithData (after state update):", nodesWithData);
-  }, [nodesWithData]);
+  }, [nodesWithData]); */
 
   const findLeaves = () => {
     const result: Node<NodeData>[] = [];
@@ -356,6 +368,7 @@ function ReactFlowTree() {
       setA(false);
     }
   }, [a]);
+
   /**
    * handles the assigning of labels to the edges after a threshold has been set.
    */
@@ -399,7 +412,9 @@ function ReactFlowTree() {
     }
   }, [popupResponse, selectedEdge, selectedEdgeBrother]);
 
-  // every time our nodes change, we want to center the graph again
+    /**
+     * every time our nodes change, we want to center the graph again
+     */
   useEffect(() => {
     fitView({ duration: 400 });
   }, [nodes, fitView]);
@@ -410,7 +425,6 @@ function ReactFlowTree() {
         <Sidebar />
         <ReactFlow
           className={styles.reactFlow}
-          //proOptions={proOptions}
           nodeTypes={nodeTypes}
           nodes={nodes}
           edges={edges}
