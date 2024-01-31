@@ -436,7 +436,9 @@ function ReactFlowTree() {
         />
       )}
       <div ref={ref} className={styles.stripedTable}>
-        {showTable && <h1>Athletes</h1>}
+        {showTable && (
+          <h1>Athletes: ({queryResultData.length} results available)</h1>
+        )}
         {showTable && <QueryResultsTable queryResult={queryResultData} />}
         {!showTable && (
           <h2>Click on a "Results"-node to show the matching athletes here!</h2>
