@@ -289,8 +289,8 @@ function ReactFlowTree() {
     setEdges(initialElements.edges);
     setInit(false);
     setSuggestionbarData([]);
-    setShowTable(false);
     setNextId(0);
+    setShowTable(false);
     setNodesWithData([]);
     setSuggestionbarData([]);
     setSelectedEdge(null);
@@ -299,8 +299,7 @@ function ReactFlowTree() {
     setSelectedEdgeBrother(null);
     setIsPopupModalOpen(false);
     setPopupResponse(null);
-    setReactFlowInstance(null);
-    setShowTable(false);
+    //setReactFlowInstance(null);
     setQueryResultData([]);
   };
   const onEdgeClick = useCallback(
