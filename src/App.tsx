@@ -291,6 +291,17 @@ function ReactFlowTree() {
     setSuggestionbarData([]);
     setShowTable(false);
     setNextId(0);
+    setNodesWithData([]);
+    setSuggestionbarData([]);
+    setSelectedEdge(null);
+    setSelectedEdgeType(null);
+    setSelectedDataRange(null);
+    setSelectedEdgeBrother(null);
+    setIsPopupModalOpen(false);
+    setPopupResponse(null);
+    setReactFlowInstance(null);
+    setShowTable(false);
+    setQueryResultData([]);
   };
   const onEdgeClick = useCallback(
     (event: React.SyntheticEvent<HTMLFormElement>, edge: Edge) => {
@@ -429,7 +440,7 @@ function ReactFlowTree() {
         {showTable && <h1>Athletes</h1>}
         {showTable && <QueryResultsTable queryResult={queryResultData} />}
         {!showTable && (
-          <h1>Click on a "Results"-node to show the matching athletes here!</h1>
+          <h2>Click on a "Results"-node to show the matching athletes here!</h2>
         )}
       </div>
     </div>
