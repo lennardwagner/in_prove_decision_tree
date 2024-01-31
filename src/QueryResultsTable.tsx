@@ -61,9 +61,7 @@ const findLeaves = (nodes, edges) => {
   return result;
 };
 
-const QueryResultsTable: React.FC<QueryResultsTableProps> = ({
-  queryResult,
-}) => {
+function QueryResultsTable({ queryResult }: QueryResultsTableProps) {
   // Check if there is no queryResult
   if (queryResult.length === 0) {
     return <div>No query Result available</div>;
@@ -92,6 +90,6 @@ const QueryResultsTable: React.FC<QueryResultsTableProps> = ({
       </tbody>
     </table>
   );
-};
+}
 
 export default QueryResultsTable;
