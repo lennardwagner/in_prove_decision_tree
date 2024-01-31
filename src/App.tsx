@@ -451,9 +451,7 @@ function ReactFlowTree() {
         >
           Log Tree
         </button>
-        <button className={styles.button} onClick={handleOpenPopup}>
-          Open Popup
-        </button>
+          {/*<button className={styles.button} onClick={handleOpenPopup}>Open Popup</button>*/}
       </div>
       {setSelectedDataRange && (
         <PopupModal
