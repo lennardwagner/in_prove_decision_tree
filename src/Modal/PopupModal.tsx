@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "./PopupModal.css";
 import Modal from "./Modal"
-const initialNewsletterModalData = {
+let initialNewsletterModalData = {
     cutoff: '50',
     sex: '', // For binary edgeType
     comparisonOperator: '',
@@ -11,10 +11,14 @@ const initialNewsletterModalData = {
 
 const PopupModal = ({ onSubmit, isOpen, onClose, edgeType, dataRange}) => {
     const key = dataRange ? Object.keys(dataRange)[0] : "";
+    console.log("datarange" + JSON.stringify(dataRange, null, 2))
+    console.log("key" + key)
     const rangeArray = dataRange ? dataRange[key] : [0, 100];
     const middle = dataRange ? ((rangeArray[0] + rangeArray[1]) / 2).toString()
         : ((rangeArray[0] + rangeArray[1]) / 2).toString()
     const step = key === "30m" ? 0.01 : 1;
+    initialNewsletterModalData.step = step;
+    console.log("step" + step)
     const focusInputRef = useRef(null);
     const [formState, setFormState] = useState(initialNewsletterModalData);
     const [sliderValue, setSliderValue] = useState(initialNewsletterModalData.cutoff);
