@@ -6,7 +6,7 @@ Prerequisites: <br>
 
 - Node.js v20.10.0
 
-Navigate to the project folder and
+Clone this repository then navigate to the project folder and
 install all dependencies from the `package.json` by running:
 
 ```sh
