@@ -381,7 +381,7 @@ function ReactFlowTree() {
       if (popupResponse.sex !== "") {
         label = popupResponse.sex;
         oppositeLabel =
-          popupResponse.sex === "männlich" ? "weiblich" : "männlich";
+          popupResponse.sex === "male" ? "female" : "male";
       } else if (popupResponse.cutoff && !popupResponse.comparisonOperator) {
         label = popupResponse.cutoff;
       } else if (popupResponse.cutoff && popupResponse.comparisonOperator) {
