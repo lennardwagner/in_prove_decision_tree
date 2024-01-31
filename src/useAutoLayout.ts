@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect } from 'react';
 import dagre from '@dagrejs/dagre';
 import {
@@ -27,7 +28,6 @@ const nodesInitializedSelector = (state: ReactFlowState) =>
   );
 
 function useAutoLayout() {
-  //const { direction } = options;
   const nodeCount = useStore(nodeCountSelector);
   const nodesInitialized = useStore(nodesInitializedSelector);
   const { getNodes, getEdges, setNodes, setEdges, fitView } = useReactFlow();
@@ -81,7 +81,6 @@ function useAutoLayout() {
     setNodes,
     setEdges,
     fitView,
-    //direction,
   ]);
 }
 

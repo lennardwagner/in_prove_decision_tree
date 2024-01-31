@@ -1,8 +1,9 @@
-import { useState, DragEvent } from 'react';
-import { Handle, NodeProps, Position } from 'reactflow';
-import cx from 'classnames';
+// @ts-nocheck
+import { useState, DragEvent } from "react";
+import { Handle, NodeProps, Position } from "reactflow";
+import cx from "classnames";
 
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 function CustomNode({ data, sourcePosition, targetPosition }: NodeProps) {
   const [isDropzoneActive, setDropzoneActive] = useState<boolean>(false);

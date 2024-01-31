@@ -28,7 +28,7 @@ import { nodeTypeLookup, compareOperatorLookup } from "./lookup";
 import Sidebar from "./Sidebar";
 import Suggestionbar from "./Suggestionbar";
 import { fetchSuggestionbarData } from "./Suggestionbar";
-//import { fetchQueryResult } from "./queryResult";
+import { fetchQueryResult } from "./QueryResultsTable";
 import QueryResultsTable from "./QueryResultsTable";
 import CustomNode from "./CustomNode";
 import useAutoLayout from "./useAutoLayout";
@@ -45,6 +45,17 @@ const defaultEdgeOptions = {
   type: "smoothstep",
   markerEnd: { type: MarkerType.ArrowClosed },
   pathOptions: { offset: 5 },
+  /*labelStyle: {
+    backgroundColor: "#5f5d72",
+    color: "white",
+    borderColor: "black",
+  },
+  labelBgStyle: {
+    backgroundColor: "#5f5d72",
+    color: "white",
+    borderColor: "black",
+  },
+  labelShowBg: true,*/
 };
 
 type NodeData = {
@@ -65,7 +76,9 @@ function ReactFlowTree() {
   const [selectedEdge, setSelectedEdge] = useState<Edge | null>();
   const [selectedEdgeType, setSelectedEdgeType] = useState<string>();
   const [selectedDataRange, setSelectedDataRange] = useState(null);
-  const [selectedEdgeBrother, setSelectedEdgeBrother] = useState<Edge | null>(null);
+  const [selectedEdgeBrother, setSelectedEdgeBrother] = useState<Edge | null>(
+    null
+  );
   const [isPopupModalOpen, setIsPopupModalOpen] = useState<Boolean>(false);
   const [popupResponse, setPopupResponse] = useState<JSON | null>();
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -129,17 +142,6 @@ function ReactFlowTree() {
       source: sourceId,
       target: targetId,
       style: { opacity: 0 },
-      labelStyle: {
-        backgroundColor: "#5f5d72",
-        color: "white",
-        borderColor: "black",
-      },
-      labelBgStyle: {
-        backgroundColor: "#5f5d72",
-        color: "white",
-        borderColor: "black",
-      },
-      labelShowBg: true,
       data: { "Source->Target": [sourceNodeName, dataParsed.nodeLabel] },
     };
 
@@ -164,11 +166,11 @@ function ReactFlowTree() {
   };
 
   // this function is called once the node from the sidebar is dropped onto a node in the current graph
-    /**
-     * onDrop handles the dropping of a node on an existing node.
-     * A node can only be dropped onto another node.
-     * Sends the dropped node to the backend and waits for an updated suggestion from the backend.
-     * */
+  /**
+   * onDrop handles the dropping of a node on an existing node.
+   * A node can only be dropped onto another node.
+   * Sends the dropped node to the backend and waits for an updated suggestion from the backend.
+   * */
   const onDrop: DragEventHandler = async (evt: DragEvent<HTMLDivElement>) => {
     // make sure that the event target is a DOM element
     if (evt.target instanceof Element) {
@@ -214,59 +216,20 @@ function ReactFlowTree() {
     //console.log("nodesWithData (after state update):", nodesWithData);
   }, [nodesWithData]); */
 
-  const findLeaves = () => {
-    const result: Node<NodeData>[] = [];
-    nodes.forEach((node) => {
-      const outgoingEdges = edges.filter((edge) => edge.source === node.id);
-      if (outgoingEdges.length === 0) {
-        // This is a leaf node
-        result.push(node);
-      }
-    });
-    return result;
-  };
-  //load query results from backend + db
-  const fetchQueryResult = async (flow: JSON, clickedNode: Node) => {
-    try {
-      const response = await fetch("http://localhost:3001/flow", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(flow),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      setQueryResultData(result);
-      //find leaves
-      const leaves = findLeaves();
-      console.log(leaves.length);
-      leaves.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
-      //const clickedIndex = leaves.indexOf(clickedNode);
-      const clickedIndex = leaves.findIndex(
-        (node) => node.id == clickedNode.id
-      );
-
-      console.log("search", clickedIndex, result[clickedIndex]);
-      return result[clickedIndex];
-    } catch (error) {
-      // Handle any errors that occurred during the fetch
-      console.error("Error during fetch:", error);
-    }
-  };
   const onNodeClick: NodeMouseHandler = async (
     _: MouseEvent,
     node: Node<NodeData>
   ) => {
     if (node.data.label === "Results") {
       const flow: JSON = reactFlowInstance?.toObject();
-      const queryResult: Node[] = await fetchQueryResult(flow, node);
+      const queryResult: Node[] = await fetchQueryResult(
+        flow,
+        node,
+        queryResultData,
+        setQueryResultData,
+        nodes,
+        edges
+      );
       ref.current?.scrollIntoView({ behavior: "smooth" });
       setQueryResultData(() => queryResult);
       setShowTable(true);
@@ -314,8 +277,9 @@ function ReactFlowTree() {
   const handleClosePopup = () => {
     setIsPopupModalOpen(false);
   };
+
   const handlePopupResponse = (data: JSON) => {
-    console.log()
+    console.log();
     setPopupResponse(data);
     handleClosePopup();
   };
@@ -380,8 +344,7 @@ function ReactFlowTree() {
 
       if (popupResponse.sex !== "") {
         label = popupResponse.sex;
-        oppositeLabel =
-          popupResponse.sex === "male" ? "female" : "male";
+        oppositeLabel = popupResponse.sex === "male" ? "female" : "male";
       } else if (popupResponse.cutoff && !popupResponse.comparisonOperator) {
         label = popupResponse.cutoff;
       } else if (popupResponse.cutoff && popupResponse.comparisonOperator) {
@@ -412,9 +375,9 @@ function ReactFlowTree() {
     }
   }, [popupResponse, selectedEdge, selectedEdgeBrother]);
 
-    /**
-     * every time our nodes change, we want to center the graph again
-     */
+  /**
+   * every time our nodes change, we want to center the graph again
+   */
   useEffect(() => {
     fitView({ duration: 400 });
   }, [nodes, fitView]);
@@ -451,7 +414,7 @@ function ReactFlowTree() {
         >
           Log Tree
         </button>
-          {/*<button className={styles.button} onClick={handleOpenPopup}>Open Popup</button>*/}
+        {/*<button className={styles.button} onClick={handleOpenPopup}>Open Popup</button>*/}
       </div>
       {setSelectedDataRange && (
         <PopupModal
