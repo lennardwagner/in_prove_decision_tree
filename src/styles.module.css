@@ -45,7 +45,6 @@
 }
 
 .suggestionbar {
-    /*overflow: scroll;*/
     color: white;
     top: 5px;
     left: 5px;
@@ -58,14 +57,18 @@
     background-color: #5f5d72;
 }
 
+.suggestionbarLabel {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: white;
+  background-color: #5f5d72;
+}
+
 .sidebarLabel {
   font-size: 18px;
   margin-bottom: 10px;
   color: white;
   background-color: #5f5d72;
-  /*border-color:white;
-  border-style:solid;
-  border-radius: 5px;*/
 }
 
 .sidebarLabel::after {

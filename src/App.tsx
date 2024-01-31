@@ -45,17 +45,6 @@ const defaultEdgeOptions = {
   type: "smoothstep",
   markerEnd: { type: MarkerType.ArrowClosed },
   pathOptions: { offset: 5 },
-  /*labelStyle: {
-    backgroundColor: "#5f5d72",
-    color: "white",
-    borderColor: "black",
-  },
-  labelBgStyle: {
-    backgroundColor: "#5f5d72",
-    color: "white",
-    borderColor: "black",
-  },
-  labelShowBg: true,*/
 };
 
 type NodeData = {
@@ -65,8 +54,9 @@ type NodeData = {
 function ReactFlowTree() {
   // this hook handles the computation of the layout once the elements change
   const { fitView } = useReactFlow();
-
   useAutoLayout();
+
+  //all needed states of the application
   const [nodes, setNodes] = useState<Node<NodeData>[]>(initialElements.nodes);
   const [edges, setEdges] = useState<Edge[]>(initialElements.edges);
   const [nextId, setNextId] = useState<number>(0);
@@ -87,9 +77,6 @@ function ReactFlowTree() {
 
   //used for scrolling reference
   const ref = useRef(null);
-  /*useEffect(() => {
-        //console.log('suggestionbarData changed:', suggestionbarData);
-    }, [suggestionbarData]); */
 
   /**
    * Function to handle the first node drop, as in that case the node should not be duplicated.
@@ -165,7 +152,6 @@ function ReactFlowTree() {
     }
   };
 
-  // this function is called once the node from the sidebar is dropped onto a node in the current graph
   /**
    * onDrop handles the dropping of a node on an existing node.
    * A node can only be dropped onto another node.
@@ -174,7 +160,6 @@ function ReactFlowTree() {
   const onDrop: DragEventHandler = async (evt: DragEvent<HTMLDivElement>) => {
     // make sure that the event target is a DOM element
     if (evt.target instanceof Element) {
-      // log the current version of the tree for tree reconstruction steps
       // from the target element search for the node wrapper element which has the node id as attribute
       const targetId = evt.target
         .closest(".react-flow__node")
@@ -208,6 +193,7 @@ function ReactFlowTree() {
           );
       }
     }
+    // log the current version of the tree for tree reconstruction steps
     handleButtonClickLog();
   };
 
@@ -216,6 +202,7 @@ function ReactFlowTree() {
     //console.log("nodesWithData (after state update):", nodesWithData);
   }, [nodesWithData]); */
 
+  /*If a "Results"-node is clicked, fetch metching athlete subset from backend and set table to be shown.*/
   const onNodeClick: NodeMouseHandler = async (
     _: MouseEvent,
     node: Node<NodeData>
@@ -240,10 +227,7 @@ function ReactFlowTree() {
   //Create Initial Node if all nodes are deleted
   const onNodesDelete: OnNodesDelete = (delNodes: Node[]) => {
     if (nodes.length == 1) {
-      setNodes(initialElements.nodes);
-      setEdges(initialElements.edges);
-      setInit(false);
-      setSuggestionbarData([]);
+      handleButtonClickNew();
     }
   };
 
@@ -255,6 +239,8 @@ function ReactFlowTree() {
     setEdges((edges) => applyEdgeChanges(changes, edges));
   };
 
+  /*This function sends the tree to the backend to be saved in the database. 
+  It is called by various other functions */
   const handleButtonClickLog = (finished: boolean = false) => {
     const path = finished
       ? "http://localhost:3001/flow"
@@ -283,6 +269,8 @@ function ReactFlowTree() {
     setPopupResponse(data);
     handleClosePopup();
   };
+
+  //Reinitialize the states so a new tree can be built
   const handleButtonClickNew = () => {
     handleButtonClickLog();
     setNodes(initialElements.nodes);
@@ -299,14 +287,15 @@ function ReactFlowTree() {
     setSelectedEdgeBrother(null);
     setIsPopupModalOpen(false);
     setPopupResponse(null);
-    //setReactFlowInstance(null);
     setQueryResultData([]);
   };
+
+  //Opens up a Pop-up on edge click where the threshold value can be input as label
   const onEdgeClick = useCallback(
     (event: React.SyntheticEvent<HTMLFormElement>, edge: Edge) => {
       const source = edge.source;
       const target = edge.target;
-      // The "brother" edge will have the same source but different target. At EOF no brother edge exists.
+      // The "brother" edge will have the same source but different target. "Results"-nodes have no brother edge.
       const otherEdge = edges.find(
         (edg) => edg.source === source && edg.target !== target
       );
@@ -409,7 +398,6 @@ function ReactFlowTree() {
           onDrop={onDrop}
           onNodeClick={onNodeClick}
           onNodesDelete={onNodesDelete}
-          // newly added edges get these options automatically
           defaultEdgeOptions={defaultEdgeOptions}
         />
         <Suggestionbar suggestionbarData={suggestionbarData} />
@@ -424,7 +412,6 @@ function ReactFlowTree() {
         >
           Log Tree
         </button>
-        {/*<button className={styles.button} onClick={handleOpenPopup}>Open Popup</button>*/}
       </div>
       {setSelectedDataRange && (
         <PopupModal

@@ -27,6 +27,8 @@ const nodesInitializedSelector = (state: ReactFlowState) =>
     (node:Node) => node.width && node.height
   );
 
+/* Uses the dagre library and the ReactFlowState to compute layout.
+Is called after every node and edge change*/
 function useAutoLayout() {
   const nodeCount = useStore(nodeCountSelector);
   const nodesInitialized = useStore(nodesInitializedSelector);

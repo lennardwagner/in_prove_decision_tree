@@ -1,11 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { DragEvent, useEffect, useState } from "react";
 
 import styles from "./styles.module.css";
 
 function Sidebar() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [sidebarData, setSidebarData] = useState([]);
   const [expandedSections, setExpandedSections] = useState({});
   useEffect(() => {
@@ -25,8 +23,9 @@ function Sidebar() {
       }
     };
     fetchData();
-  }, []); // Empty dependency array ensures useEffect runs only once, similar to componentDidMount
+  }, []); // Empty dependency array ensures useEffect runs only once
 
+  //Transfere Data from sidebar node to tree node
   const onDragStart = (
     event: DragEvent,
     nodeType: string,
@@ -39,16 +38,8 @@ function Sidebar() {
       JSON.stringify(draggedData)
     );
     event.dataTransfer.effectAllowed = "move";
-    // //console.log(nodeType);//console.log(nodeLabel);//console.log("Node Data is:" + JSON.stringify(nodeData))
   };
-  /*const onDragStart = (nodeData: any) => (event: DragEvent) => {
-    const dataString = JSON.stringify(nodeData);
-    event.dataTransfer.setData("application/reactflow", dataString);
-    //console.log(nodeData);
-    //console.log("Geschriebene daten: " + dataString);
-  };*/
 
-  // @ts-expect-error
   const toggleSection = (sectionIndex) => {
     setExpandedSections((prevExpandedSections) => ({
       ...prevExpandedSections,
@@ -63,10 +54,11 @@ function Sidebar() {
       acc[node.category] = [];
     }
     acc[node.category].push(node);
-    //console.log(acc);
     return acc;
   }, {});
 
+  /*Only section titles (=categories) are rendered at first.
+  Only on click are the corresponding sidebar nodes also rendered*/
   return (
     <div className={styles.sidebar}>
       {sectionTitles.map((title, sectionIndex) => (

@@ -1,12 +1,4 @@
-/*export const nodeTypeLookup: Record<string, string> = {
-    "geschlecht": "binary",
-    "alter": "range",
-    "gewicht": "range",
-    "groesse": "range",
-    "trainingsleistung": "range",
-    "blutwerte": "range",
-    "vitaminD": "range",
-} */
+//Maps categories to input types on the Pop-up
 export const nodeTypeLookup = new Map<string, string>([
     ["sex", "binary"],
     ["age", "range"],

@@ -61,6 +61,7 @@ const findLeaves = (nodes, edges) => {
   return result;
 };
 
+//Build results table using the object keys as column names
 function QueryResultsTable({ queryResult }: QueryResultsTableProps) {
   // Check if there is no queryResult
   if (queryResult.length === 0) {
@@ -83,7 +84,7 @@ function QueryResultsTable({ queryResult }: QueryResultsTableProps) {
         {queryResult.map((node) => (
           <tr key={node.id}>
             {columns.map((column) => (
-              <td key={column}>{node[column]}</td>
+              <td key={column + node.id}>{node[column]}</td>
             ))}
           </tr>
         ))}
